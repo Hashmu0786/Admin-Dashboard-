@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import Details from "./Details";
 
 export default function Tabel() {
+  const [showDetails, setShowDetails] = useState(false);
   const [employees, setEmployees] = useState([
     {
       image:
@@ -84,7 +86,10 @@ export default function Tabel() {
                 <td className="px-2 py-3 xl:px-4 2xl:py-5 2xl:px-6">
                   {row.DOJ}
                 </td>
-                <td className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6">
+                <td
+                  className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6"
+                  onClick={() => setShowDetails(!showDetails)}
+                >
                   <button className="bg-blue-200 shadow text-blue-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-2 xl:py-1 xl:px-1 2xl:py-2 2xl:px-4 rounded-lg">
                     View Details
                   </button>
@@ -94,6 +99,7 @@ export default function Tabel() {
           </tbody>
         </table>
       </div>
+      {showDetails ? <Details setShowDetails={setShowDetails} /> : null}
     </div>
   );
 }

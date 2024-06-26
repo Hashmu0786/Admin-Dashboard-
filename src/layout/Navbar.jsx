@@ -8,7 +8,7 @@ export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <div className="fixed top-0 z-50 bg-white flex items-center w-full justify-end h-[40px] p-8 2xl:h-[100px] 3xl:h-[120px] border-b border-gray-300">
+    <div className="fixed top-0 z-20 bg-white flex items-center w-full justify-end h-[40px] p-8 2xl:h-[100px] 3xl:h-[120px] border-b border-gray-300">
       <div className="flex gap-6 3xl:gap-10 items-center mr-48 2xl:mr-64 xl:mr-56 3xl:mr-96 relative">
         <div className="relative">
           <IoIosNotifications
