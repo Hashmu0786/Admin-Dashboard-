@@ -52,7 +52,8 @@ const loginSlice = createSlice({
         state.error = null;
         state.addStatus = "fulfilled";
         console.log(action.payload.data.token);
-        Cookies.set("token", action.payload.data.token);
+        if (action.payload.data.token)
+          Cookies.set("token", action.payload.data.token);
         state.isAuthenticated = true;
         window.location.href = "/";
       })
