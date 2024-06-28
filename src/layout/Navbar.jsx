@@ -3,9 +3,24 @@ import { IoIosNotifications } from "react-icons/io";
 import { FaMoon } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
+import { useDispatch } from "react-redux";
+import { clearAuthentication } from "../reduxToolkit/loginSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      dispatch(clearAuthentication());
+      navigate("/signin");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   return (
     <div className="fixed top-0 z-20 bg-white flex items-center w-full justify-end h-[40px] p-8 2xl:h-[100px] 3xl:h-[120px] border-b border-gray-300">
@@ -32,7 +47,10 @@ export default function Navbar() {
                   <li className="text-sm font-medium 2xl:text-2xl">Account</li>
                   <CgProfile className="h-5 w-5 2xl:h-8 2xl:w-8 text-gray-800" />
                 </div>
-                <div className="flex gap-4 px-8 py-2 2xl:py-4 2xl:px-16 hover:bg-gray-100  hover:rounded-lg">
+                <div
+                  className="flex gap-4 px-8 py-2 2xl:py-4 2xl:px-16 hover:bg-gray-100  hover:rounded-lg"
+                  onClick={handleLogout}
+                >
                   <li className="text-sm font-medium 2xl:text-2xl ">
                     Sign out
                   </li>
