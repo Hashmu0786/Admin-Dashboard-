@@ -27,7 +27,7 @@ export default function Sidebar() {
         <div className="px-2 3xl:px-4">
           <ul className="flex flex-col gap-3 2xl:gap-5 3xl:gap-8">
             <NavLink
-              to="/layout"
+              to="/"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -41,7 +41,7 @@ export default function Sidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/layout/attendance"
+              to="/attendance"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -55,7 +55,7 @@ export default function Sidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/layout/leave"
+              to="/leave"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -69,7 +69,7 @@ export default function Sidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/layout/employee"
+              to="/employee"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -83,7 +83,7 @@ export default function Sidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/layout/document"
+              to="/document"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -97,7 +97,7 @@ export default function Sidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/layout/report"
+              to="/report"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -115,7 +115,7 @@ export default function Sidebar() {
         <div className="px-2 mt-14 3xl:px-4 3xl:mt-20">
           <ul className="flex flex-col gap-3">
             <NavLink
-              to="/layout/account"
+              to="/account"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }
@@ -129,7 +129,7 @@ export default function Sidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/layout/setting"
+              to="/setting"
               className={({ isActive }) =>
                 isActive ? "bg-blue-500 text-white rounded-lg" : null
               }

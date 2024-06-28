@@ -10,9 +10,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
-  const { isLoading, addStatus, error, credential } = useSelector(
-    (state) => state.login
-  );
+  const { isLoading, error } = useSelector((state) => state.login);
 
   const validateForm = () => {
     const newErrors = {};
@@ -39,7 +37,7 @@ const LoginForm = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        await dispatch(signin({ email, password }));
+        dispatch(signin({ email, password }));
       } catch (error) {
         console.error("Signin failed:", error);
       }
