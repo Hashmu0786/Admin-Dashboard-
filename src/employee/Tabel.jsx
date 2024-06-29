@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Details from "./Details";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDataEmployee } from "../reduxToolkit/empSlice";
+import { fetchDataEmployee, oneEmployeeData } from "../reduxToolkit/empSlice";
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -26,6 +26,12 @@ export default function Table() {
     const month = date.toLocaleString("default", { month: "short" });
     const year = date.getFullYear();
     return `${day}${month} ${year}`;
+  };
+  
+
+  const handleViewDetails = (Id) => {
+    dispatch(oneEmployeeData(Id));
+    setShowDetails(!showDetails);
   };
 
   return (
@@ -87,6 +93,7 @@ export default function Table() {
                   </td>
                   <td className="px-2 py-3 xl:px-4 2xl:py-5 2xl:px-4">
                     {row.employeeDetails?.employeeId || "N/A"}
+                    {/* {row._id} */}
                   </td>
                   <td className="py-3 px-4 2xl:py-5 2xl:px-6">
                     {row.employeeDetails?.department || "N/A"}
@@ -100,7 +107,7 @@ export default function Table() {
                   <td className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6">
                     <button
                       className="bg-blue-200 shadow text-blue-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-2 xl:py-1 xl:px-1 2xl:py-2 2xl:px-4 rounded-lg"
-                      onClick={() => setShowDetails(!showDetails)}
+                      onClick={() => handleViewDetails(row._id)}
                     >
                       View Details
                     </button>
