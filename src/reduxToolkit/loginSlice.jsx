@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const baseUrl = "https://56kjq9dz-8000.inc1.devtunnels.ms/";
+export const baseUrl = "https://56kjq9dz-8000.inc1.devtunnels.ms/";
 
 const initialState = {
   isLoading: false,

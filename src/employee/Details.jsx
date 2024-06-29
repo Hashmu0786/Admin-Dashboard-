@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useSelector } from "react-redux";
 
 export default function Details({ setShowDetails }) {
+  // const {
+  //   data: empData,
+  //   isLoading,
+  //   error,
+  // } = useSelector((state) => state.employee.data);
+
   const [activeSection, setActiveSection] = useState("personal");
 
   return (
