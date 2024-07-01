@@ -8,12 +8,12 @@ export default function Cards() {
       des: "2 Urgently needed",
     },
     {
-      title: "Job Open",
+      title: "Today Present",
       count: 15,
       des: "5 Active hiring",
     },
     {
-      title: "Total Project",
+      title: "Today Absent",
       count: 10,
       des: "5 Active now",
     },

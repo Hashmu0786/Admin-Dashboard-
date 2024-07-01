@@ -1,5 +1,5 @@
 import React from "react";
-import Searchbar from "../sharedComponents/Searchbar";
+import Searchbar from "./Searchbar";
 import Pagination from "../sharedComponents/Pagination";
 import Tabel from "./Tabel";
 
