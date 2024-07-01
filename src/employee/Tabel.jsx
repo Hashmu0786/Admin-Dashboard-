@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Details from "./Details";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataEmployee, oneEmployeeData } from "../reduxToolkit/empSlice";
+import { CiEdit } from "react-icons/ci";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -27,7 +29,6 @@ export default function Table() {
     const year = date.getFullYear();
     return `${day}${month} ${year}`;
   };
-  
 
   const handleViewDetails = (Id) => {
     dispatch(oneEmployeeData(Id));
@@ -51,7 +52,7 @@ export default function Table() {
         ) : (
           <table className="w-full">
             <thead className="sticky top-0 bg-white z-10 font-medium text-[#333] 2xl:text-lg font-[roboto]">
-              <tr className="text-[12px] 2xl:text-[18px] 3xl:text-2xl">
+              <tr className="text-[12px] 2xl:text-[18px] 3xl:text-2xl border-b-2">
                 <th className="px-4 py-2 xl:px-6 2xl:py-4 2xl:px-2 3xl:py-5 3xl:px-8 text-left">
                   S.no
                 </th>
@@ -73,11 +74,17 @@ export default function Table() {
                 <th className="pr-8 xl:px-4 2xl:py-4 2xl:px-[10px] text-left">
                   Actions
                 </th>
+                <th className="pr-8 xl:px-4 2xl:py-4 2xl:px-[10px] text-left">
+                  Edit
+                </th>
+                <th className="pr-8 xl:px-4 2xl:py-4 2xl:px-[10px] text-left">
+                  Delete
+                </th>
               </tr>
             </thead>
             <tbody className="text-xs font-medium font-[roboto] 2xl:text-lg 3xl:text-xl">
               {empData?.employees?.map((row, index) => (
-                <tr key={index}>
+                <tr key={index} className="border-b">
                   <td className="py-3 px-4 xl:px-8 2xl:py-4 2xl:px-5 3xl:px-8">
                     {index + 1}
                   </td>
@@ -110,6 +117,16 @@ export default function Table() {
                       onClick={() => handleViewDetails(row._id)}
                     >
                       View Details
+                    </button>
+                  </td>
+                  <td className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6 text-blue-800">
+                    <button onClick={() => handleViewDetails(row._id)}>
+                      <CiEdit size={20} />
+                    </button>
+                  </td>
+                  <td className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6 text-red-500">
+                    <button onClick={() => handleViewDetails(row._id)}>
+                      <MdOutlineDeleteForever size={20} />
                     </button>
                   </td>
                 </tr>
