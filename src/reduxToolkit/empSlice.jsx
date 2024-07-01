@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../services/api.js";
 import Cookies from "js-cookie";
-import { FaLessThanEqual } from "react-icons/fa";
 
 //  initialize the state
 
 const initialState = {
   data: [],
   onedata: [],
+  deleteData: [],
   isLoading: false,
   error: null,
 };
@@ -45,6 +45,22 @@ export const oneEmployeeData = createAsyncThunk(
   }
 );
 
+// Delete the single employee data
+
+export const DeltetOneEmployee = createAsyncThunk(
+  "employee/OneDelete",
+  async (id) => {
+    const token = Cookies.get("token");
+    const response = await api.delete(`employees/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Delete the single data", response.data);
+    return response?.data;
+  }
+);
+
 const employeeSlice = createSlice({
   name: "employee",
   initialState,
@@ -75,6 +91,19 @@ const employeeSlice = createSlice({
       .addCase(oneEmployeeData.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+
+      //Delete the single data
+      .addCase(DeltetOneEmployee.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(DeltetOneEmployee.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.deleteData = action.payload;
+      })
+      .addCase(DeltetOneEmployee.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
       });
   },
 });

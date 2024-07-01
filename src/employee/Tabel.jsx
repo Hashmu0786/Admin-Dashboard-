@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Details from "./Details";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDataEmployee, oneEmployeeData } from "../reduxToolkit/empSlice";
+import {
+  DeltetOneEmployee,
+  fetchDataEmployee,
+  oneEmployeeData,
+} from "../reduxToolkit/empSlice";
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import Delete from "./Delete";
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -14,6 +19,14 @@ export default function Table() {
   } = useSelector((state) => state.employee);
 
   const [showDetails, setShowDetails] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleDeleteId = (id) => {
+    setDeleteId(id);
+    setShowDelete(!showDelete);
+    console.log("my id ", id);
+  };
 
   useEffect(() => {
     dispatch(fetchDataEmployee());
@@ -152,8 +165,11 @@ export default function Table() {
                       <CiEdit size={20} />
                     </button>
                   </td>
-                  <td className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6 text-red-500">
-                    <button onClick={() => handleViewDetails(row._id)}>
+                  <td
+                    className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6 text-red-500"
+                    onClick={() => handleDeleteId(row._id)}
+                  >
+                    <button>
                       <MdOutlineDeleteForever size={20} />
                     </button>
                   </td>
@@ -164,6 +180,9 @@ export default function Table() {
         )}
       </div>
       {showDetails ? <Details setShowDetails={setShowDetails} /> : null}
+      {showDelete ? (
+        <Delete setShowDelete={setShowDelete} deleteId={deleteId} />
+      ) : null}
     </div>
   );
 }
