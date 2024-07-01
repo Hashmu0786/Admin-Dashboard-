@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function Searchbar() {
   const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [showFilter, setShowFilter] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const datePickerRef = useRef(null);
 
@@ -28,6 +29,22 @@ export default function Searchbar() {
               placeholder="Search"
               className="bg-transparent text-sm 2xl:text-base 3xl:text-xl text-gray-500 px-2 py-1 flex-grow outline-none focus:border-black 2xl:px-4 2xl:py-2"
             />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 2xl:gap-4 border-[1px] border-gray-500 rounded-lg px-1 py-[2px] 3xl:px-5 3xl:py-3 2xl:px-4 2xl:py-2">
+              <span onClick={handleIconClick} className="cursor-pointer">
+                <FaCalendarAlt size={15} className="ml-0 2xl:h-8 2xl:w-8" />
+              </span>
+              <DatePicker
+                ref={datePickerRef}
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                className="text-gray-800 text-xs 2xl:text-[22px] 3xl:text-2xl outline-none 2xl:h-8"
+                placeholderText="Select date"
+                dateFormat="dd/MM/yyyy"
+                popperPlacement="bottom-end"
+              />
+            </div>
           </div>
 
           <div
@@ -64,10 +81,29 @@ export default function Searchbar() {
               <option value="Sales">Sales</option>
             </select>
           </div>
-          {/* Desgination select */}
+
+          {/* Date picker
+          <div className="relative">
+            <div className="flex items-center gap-2 2xl:gap-4 border-[1px] border-gray-500 rounded-lg px-2 py-1 3xl:px-5 3xl:py-3 2xl:px-4 2xl:py-2">
+              <span onClick={handleIconClick} className="cursor-pointer">
+                <FaCalendarAlt size={20} className="ml-0 2xl:h-8 2xl:w-8" />
+              </span>
+              <DatePicker
+                ref={datePickerRef}
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                className="text-gray-800 text-sm 2xl:text-[22px] 3xl:text-2xl outline-none 2xl:h-8"
+                placeholderText="Select date"
+                dateFormat="dd/MM/yyyy"
+                popperPlacement="bottom-end"
+              />
+            </div>
+          </div> */}
+
+          {/* Status select */}
           <div className="flex items-center border-[1px] border-gray-500 px-2 py-1 rounded-lg text-xs 3xl:px-5 3xl:py-3 2xl:px-4 2xl:py-2">
             <span className="text-gray-800 font-medium 2xl:text-xl 3xl:text-2xl">
-              Designation
+              Status:
             </span>
             <select
               value={selectedStatus}
@@ -75,12 +111,9 @@ export default function Searchbar() {
               className="outline-none focus:border-black px-2 py-1 2xl:text-xl 3xl:text-2xl"
             >
               <option value="All">All</option>
-              <option value="Frontend Developer">Frontend Developer </option>
-              <option value="Full Stack Developer">Full Stack Developer</option>
-              <option value="Telecaller">Telecaller</option>
-              <option value="React Native Developer">
-                React Native Developer
-              </option>
+              <option value="Log in">Log in</option>
+              <option value="Log out">Log out</option>
+              <option value="Leave">Leave</option>
             </select>
           </div>
         </div>

@@ -5,6 +5,7 @@ export default function Pagination() {
 
   return (
     <>
+      {/* mx-5 */}
       <div className="flex justify-between items-center mx-5 items-center gap-4 font-[roboto]">
         <div className="flex gap-2">
           <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold h-8 px-2 2xl:h-12 2xl:px-6 2xl:text-lg rounded-lg mt-3 text-xs font-medium">

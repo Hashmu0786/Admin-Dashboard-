@@ -183,6 +183,14 @@ export default function Tabel() {
     );
   };
 
+  function getFormattedDate() {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.toLocaleString("default", { month: "short" });
+    const year = today.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
   const handleEditClick = (empID) => {
     setEditingRowId(empID);
   };
@@ -197,15 +205,18 @@ export default function Tabel() {
 
   return (
     <div className="w-[450px] mt-0 w-full">
-      <div className="font-inter ml-[-15px] font-semibold py-2 px-6 xl:py-3 xl:px-4 xl:ml-0 2xl:ml-[-10px] 2xl:px-4 ">
+      <div className=" flex font-inter ml-[-15px] font-semibold py-2 px-6 xl:py-3 xl:px-4 xl:ml-0 2xl:ml-[-10px] 2xl:px-4 ">
         <h2 className="text-[18px] 2xl:text-3xl 3xl:text-4xl ml-2 mt-2">
           Attendance Table
+        </h2>
+        <h2 className="text-[18px] 2xl:text-3xl 3xl:text-4xl ml-2 mt-2">
+          {getFormattedDate()}
         </h2>
       </div>
       <hr />
       <div className="overflow-x-auto h-[450px] xl:h-[360px] 2xl:h-[660px] 3xl:h-[630px] border-b-2">
         <table className="w-auto">
-          <thead className="sticky top-0 bg-white z-10  font-medium text-[#333] 2xl:text-lg font-[roboto] ">
+          <thead className="sticky top-0 bg-white  font-medium text-[#333] 2xl:text-lg font-[roboto] ">
             <tr className="text-[12px]  2xl:text-[18px] 3xl:text-2xl">
               <th className="px-4 py-2 xl:px-6 2xl:py-4 2xl:px-2 3xl:py-5 3xl:px-8 text-left">
                 S.no

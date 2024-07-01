@@ -35,6 +35,13 @@ export default function Table() {
     setShowDetails(!showDetails);
   };
 
+  const getInitials = (name) => {
+    if (!name) return "NA";
+    const names = name.split(" ");
+    const initials = names.map((n) => n[0]).join("");
+    return initials.toUpperCase();
+  };
+
   return (
     <div className="w-full mt-0">
       <div className="font-inter ml-[-15px] font-semibold py-2 px-6 xl:py-3 xl:px-4 xl:ml-0 2xl:ml-[-10px] 2xl:px-4">
@@ -88,13 +95,34 @@ export default function Table() {
                   <td className="py-3 px-4 xl:px-8 2xl:py-4 2xl:px-5 3xl:px-8">
                     {index + 1}
                   </td>
-                  <td className="px-0 py-3 xl:px-4 2xl:py-5 2xl:px-4">
+                  {/* <td className="px-0 py-3 xl:px-4 2xl:py-5 2xl:px-4">
                     <div className="flex items-center space-x-2 xl:space-x-3 2xl:space-x-5">
                       <img
-                        src={row.profilePic || "N/A"}
+                        src={row.img || "N/A"}
                         alt="Employee"
                         className="h-10 w-10 rounded-full 2xl:h-14 2xl:w-14"
                       />
+                      <p>{row.name || "N/A"}</p>
+                    </div>
+                  </td> */}
+
+                  <td className="px-0 py-3 xl:px-4 2xl:py-5 2xl:px-4">
+                    <div className="flex items-center space-x-2 xl:space-x-3 2xl:space-x-5">
+                      {row.img ? (
+                        <img
+                          src={row.img}
+                          alt="Employee"
+                          className="h-10 w-10 rounded-full 2xl:h-14 2xl:w-14"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "";
+                          }}
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full 2xl:h-14 2xl:w-14 bg-gray-200 flex items-center justify-center text-gray-700 font-semibold">
+                          {getInitials(row.name)}
+                        </div>
+                      )}
                       <p>{row.name || "N/A"}</p>
                     </div>
                   </td>
