@@ -1,8 +1,8 @@
-
-
 import React, { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
+import Loading from "../sharedComponents/Loading";
+import Error from "../sharedComponents/Error";
 
 export default function Details({ setShowDetails }) {
   const empData = useSelector((state) => state.employee.onedata);
@@ -17,56 +17,52 @@ export default function Details({ setShowDetails }) {
       </h2>
       <div className="flex gap-2">
         <p className="font-bold">Full Name :</p>
-        <p className="font-medium">{empData?.name || "NA"}</p>
+        <p className="font-medium">{empData?.name || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Date Of Birth:</p>
-        <p className="font-medium">{empData?.personalDetails?.Dob || "NA"}</p>
+        <p className="font-medium">{empData?.personalDetails?.Dob || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Gender:</p>
-        <p className="font-medium">
-          {empData?.personalDetails?.gender || "NA"}
-        </p>
+        <p className="font-medium">{empData?.personalDetails?.gender || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Phone no:</p>
-        <p className="font-medium">{empData?.mobileNumber || "NA"}</p>
+        <p className="font-medium">{empData?.mobileNumber || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Full Address:</p>
-        <p className="font-medium">
-          {empData?.address?.currentAddress || "NA"}
-        </p>
+        <p className="font-medium">{empData?.address?.currentAddress || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Blood Group:</p>
         <p className="font-medium">
-          {empData?.personalDetails?.bloodGroup || "NA"}
+          {empData?.personalDetails?.bloodGroup || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Marital Status:</p>
         <p className="font-medium">
-          {empData?.personalDetails?.maritalStatus || "NA"}
+          {empData?.personalDetails?.maritalStatus || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Emergency Contact no:</p>
         <p className="font-medium">
-          {empData?.emergencyDetails?.contactNumber || "NA"}
+          {empData?.emergencyDetails?.contactNumber || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Emergency Person Name:</p>
         <p className="font-medium">
-          {empData?.emergencyDetails?.contactName || "NA"}
+          {empData?.emergencyDetails?.contactName || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Relationship to Emergency Contact :</p>
         <p className="font-medium">
-          {empData?.emergencyDetails?.relationship || "NA"}
+          {empData?.emergencyDetails?.relationship || ""}
         </p>
       </div>
     </div>
@@ -79,35 +75,35 @@ export default function Details({ setShowDetails }) {
       </h2>
       <div className="flex gap-2">
         <p className="font-bold">Full Name :</p>
-        <p className="font-medium">{empData?.name || "NA"}</p>
+        <p className="font-medium">{empData?.name || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Employee ID:</p>
         <p className="font-medium">
-          {empData?.employeeDetails?.employeeId || "NA"}
+          {empData?.employeeDetails?.employeeId || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Date Of Joining:</p>
         <p className="font-medium">
-          {empData?.employeeDetails?.dateOfJoining || "NA"}
+          {empData?.employeeDetails?.dateOfJoining || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Department:</p>
         <p className="font-medium">
-          {empData?.employeeDetails?.department || "NA"}
+          {empData?.employeeDetails?.department?.name || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Designation:</p>
         <p className="font-medium">
-          {empData?.employeeDetails?.designation || "NA"}
+          {empData?.employeeDetails?.designation || ""}
         </p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Phone no:</p>
-        <p className="font-medium">{empData?.mobileNumber || "NA"}</p>
+        <p className="font-medium">{empData?.mobileNumber || ""}</p>
       </div>
     </div>
   );
@@ -119,23 +115,23 @@ export default function Details({ setShowDetails }) {
       </h2>
       <div className="flex gap-2">
         <p className="font-bold">Account Holder Name :</p>
-        <p className="font-medium">{empData?.bankHolder || "NA"}</p>
+        <p className="font-medium">{empData?.bankHolder || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Account Number :</p>
-        <p className="font-medium">{empData?.accountNumber || "NA"}</p>
+        <p className="font-medium">{empData?.accountNumber || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">IFSC Code :</p>
-        <p className="font-medium">{empData?.ifsc || "NA"}</p>
+        <p className="font-medium">{empData?.ifsc || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Bank Name :</p>
-        <p className="font-medium">{empData?.bankName || "NA"}</p>
+        <p className="font-medium">{empData?.bankName || ""}</p>
       </div>
       <div className="flex gap-4">
         <p className="font-bold">Branch Name :</p>
-        <p className="font-medium">{empData?.branchName || "NA"}</p>
+        <p className="font-medium">{empData?.branchName || ""}</p>
       </div>
     </div>
   );
@@ -181,11 +177,21 @@ export default function Details({ setShowDetails }) {
               />
             </ul>
           </div>
-          <div className="p-2 2xl:p-4 3xl:p-6 font-[roboto] text-sm 2xl:text-base 3xl:text-lg">
-            {activeSection === "personal" && renderPersonalDetails()}
-            {activeSection === "employee" && renderEmployeeDetails()}
-            {activeSection === "bank" && renderBankDetails()}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center mt-40">
+              <Loading />
+            </div>
+          ) : error ? (
+            <div className="flex justify-center mt-40">
+              <Error />
+            </div>
+          ) : (
+            <div className="p-2 2xl:p-4 3xl:p-6 font-[roboto] text-sm 2xl:text-base 3xl:text-lg">
+              {activeSection === "personal" && renderPersonalDetails()}
+              {activeSection === "employee" && renderEmployeeDetails()}
+              {activeSection === "bank" && renderBankDetails()}
+            </div>
+          )}
         </div>
       </div>
     </>

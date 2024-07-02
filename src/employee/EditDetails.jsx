@@ -9,6 +9,8 @@ import {
   fetchDataEmployee,
   oneEmployeeData,
 } from "../reduxToolkit/empSlice";
+import Loading from "../sharedComponents/Loading";
+import Error from "../sharedComponents/Error";
 
 export default function EditDetails({ setShowEditDetails, editId }) {
   const dispatch = useDispatch();
@@ -343,29 +345,39 @@ export default function EditDetails({ setShowEditDetails, editId }) {
               />
             </ul>
           </div>
-          <form
-            className="p-2 2xl:p-4 3xl:p-6 font-[roboto] text-sm 2xl:text-base 3xl:text-lg"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            {activeSection === "personal" && renderPersonalDetails()}
-            {activeSection === "employee" && renderEmployeeDetails()}
-            {activeSection === "bank" && renderBankDetails()}
-            <div className="flex gap-4 mt-4 justify-end">
-              <button
-                type="button"
-                onClick={() => setShowEditDetails(false)}
-                className="bg-gray-200 text-gray-900 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-800 hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-blue-700"
-              >
-                Submit
-              </button>
+          {isLoading ? (
+            <div className="flex justify-center mt-40">
+              <Loading />
             </div>
-          </form>
+          ) : error ? (
+            <div className="flex justify-center mt-40">
+              <Error />
+            </div>
+          ) : (
+            <form
+              className="p-2 2xl:p-4 3xl:p-6 font-[roboto] text-sm 2xl:text-base 3xl:text-lg"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              {activeSection === "personal" && renderPersonalDetails()}
+              {activeSection === "employee" && renderEmployeeDetails()}
+              {activeSection === "bank" && renderBankDetails()}
+              <div className="flex gap-4 mt-4 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowEditDetails(false)}
+                  className="bg-gray-200 text-gray-900 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-800 hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-blue-700"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </>

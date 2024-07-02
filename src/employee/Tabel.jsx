@@ -208,6 +208,8 @@ import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Delete from "./Delete";
 import EditDetails from "./EditDetails";
+import Loading from "../sharedComponents/Loading";
+import Error from "../sharedComponents/Error";
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -269,9 +271,13 @@ export default function Table() {
       <hr />
       <div className="overflow-x-auto w-full h-[450px] xl:h-[360px] 2xl:h-[660px] 3xl:h-[630px] border-b-2">
         {isLoading ? (
-          <p className="text-center">Loading...</p>
+          <div className="flex justify-center mt-40">
+            <Loading />
+          </div>
         ) : error ? (
-          <p className="text-center">Error: {error}</p>
+          <div className="flex justify-center mt-40">
+            <Error />
+          </div>
         ) : (
           <table className="w-full">
             <thead className="sticky top-0 bg-white z-10 font-medium text-[#333] 2xl:text-lg font-[roboto]">
