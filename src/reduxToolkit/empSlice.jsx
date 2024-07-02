@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 const initialState = {
   data: [],
   onedata: [],
+  depList: [],
+  editdata: [],
   deleteData: [],
   isLoading: false,
   error: null,
@@ -45,6 +47,24 @@ export const oneEmployeeData = createAsyncThunk(
   }
 );
 
+// Edit the employee Data
+
+export const EditEmpData = createAsyncThunk(
+  "employee/editData",
+  async ({ id, data }) => {
+    console.log(id, "idddddddd");
+    console.log(data, "dataaaaaaaa");
+    const token = Cookies.get("token");
+    const response = await api.put(`employees/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("edit the data", response.data);
+    return response?.data?.data;
+  }
+);
+
 // Delete the single employee data
 
 export const DeltetOneEmployee = createAsyncThunk(
@@ -61,10 +81,28 @@ export const DeltetOneEmployee = createAsyncThunk(
   }
 );
 
+export const DepartmentList = createAsyncThunk(
+  "employee/departmentlist",
+  async () => {
+    const token = Cookies.get("token");
+    const response = await api.get(`organization/departments`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Department", response.data);
+    return response?.data;
+  }
+);
+
 const employeeSlice = createSlice({
   name: "employee",
   initialState,
-  reducers: {},
+  reducers: {
+    clearEmployeeData: (state) => {
+      state.onedata = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       // for the all employee data
@@ -93,6 +131,20 @@ const employeeSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Edit the employee data
+
+      .addCase(EditEmpData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(EditEmpData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.editdata = action.payload;
+      })
+      .addCase(EditEmpData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+
       //Delete the single data
       .addCase(DeltetOneEmployee.pending, (state) => {
         state.isLoading = true;
@@ -104,8 +156,21 @@ const employeeSlice = createSlice({
       .addCase(DeltetOneEmployee.rejected, (state, action) => {
         state.error = action.payload;
         state.isLoading = false;
+      })
+
+      //Department list
+      .addCase(DepartmentList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(DepartmentList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.depList = action.payload;
+      })
+      .addCase(DepartmentList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
-
+export const { clearEmployeeData } = employeeSlice.actions;
 export default employeeSlice.reducer;

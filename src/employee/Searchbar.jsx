@@ -1,19 +1,12 @@
 import React, { useRef, useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
-import DatePicker from "react-datepicker";
-import { FaCalendarAlt } from "react-icons/fa";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function Searchbar() {
   const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [showFilter, setShowFilter] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const datePickerRef = useRef(null);
-
-  const handleIconClick = () => {
-    datePickerRef.current.setFocus();
-  };
 
   return (
     <>
