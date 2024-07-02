@@ -61,12 +61,14 @@ export default function EditDetails({ setShowEditDetails, editId }) {
 
   const handleDepartmentChange = (event) => {
     const selectedDepartmentName = event.target.value;
+    console.log("event", event);
+    console.log(selectedDepartmentName);
     const selectedDepartment = depList?.data?.find(
       (dep) => dep?.name === selectedDepartmentName
     );
     if (selectedDepartment) {
       setDepId(selectedDepartment._id);
-      console.log("Selected Department ID:", selectedDepartment._id);
+      console.log("Selected Department ID:", selectedDepartment);
     }
   };
 
