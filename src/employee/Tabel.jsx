@@ -62,10 +62,15 @@ export default function Table() {
 
   return (
     <div className="w-full mt-0">
-      <div className="font-inter ml-[-15px] font-semibold py-2 px-6 xl:py-3 xl:px-4 xl:ml-0 2xl:ml-[-10px] 2xl:px-4">
+      <div className="flex justify-between font-inter ml-[-15px] font-semibold py-2 px-6 xl:py-3 xl:px-4 xl:ml-0 2xl:ml-[-10px] 2xl:px-4">
         <h2 className="text-[18px] 2xl:text-3xl 3xl:text-4xl ml-2 mt-2">
           Employee Table
         </h2>
+        <div>
+          <button className="text-xs bg-indigo-500 text-gray-900  p-2 rounded-lg hover:bg-indigo-800 hover:text-white">
+            Add Employee
+          </button>
+        </div>
       </div>
       <hr />
       <div className="overflow-x-auto w-full h-[450px] xl:h-[360px] 2xl:h-[660px] 3xl:h-[630px] border-b-2">

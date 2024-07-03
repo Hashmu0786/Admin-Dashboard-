@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/logo.png";
+import logo from "./images/hr logo.png";
 import { FaHouse } from "react-icons/fa6";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { BiCalendarExclamation } from "react-icons/bi";
@@ -14,17 +14,8 @@ import { IoDocumentsOutline } from "react-icons/io5";
 export default function Sidebar() {
   return (
     <>
-      <div className="w-50 xl:w-56 2xl:w-64 3xl:w-96  h-screen sticky top-0 left-0 flex flex-col gap-5 3xl:gap-8 bg-[#fffff] text-gray-500 font-[poppins] font-medium text-sm 2xl:text-lg 3xl:text-3xl shadow">
-        <div className="flex justify-center">
-          <img
-            src={logo}
-            alt="logo"
-            height={50}
-            width={50}
-            className="m-5 2xl:h-10 2xl:w-20 2xl:m-10 3xl:w-28 3xl:h-16"
-          />
-        </div>
-        <div className="px-2 3xl:px-4">
+      <div className="w-50 xl:w-56 2xl:w-64 3xl:w-96  h-screen sticky top-0 left-0 flex flex-col 2xl:gap-5 3xl:gap-8 bg-[#fffff] text-gray-500 font-[poppins] font-medium text-sm 2xl:text-lg 3xl:text-3xl shadow">
+        <div className="px-2 3xl:px-4  mt-12 2xl:mt-20">
           <ul className="flex flex-col gap-3 2xl:gap-5 3xl:gap-8">
             <NavLink
               to="/"
@@ -143,6 +134,15 @@ export default function Sidebar() {
               </div>
             </NavLink>
           </ul>
+        </div>
+        <div className="flex justify-start ml-5 mt-3 2xl:ml-2">
+          <img
+            src={logo}
+            alt="logo"
+            height={70}
+            width={70}
+            className="m-5 2xl:h-10  2xl:w-28 2xl:h-28"
+          />
         </div>
       </div>
     </>

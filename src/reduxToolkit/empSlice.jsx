@@ -25,7 +25,7 @@ export const fetchDataEmployee = createAsyncThunk(
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log(response.data, "employees");
+    console.log(response.data, "employees");
     return response?.data?.data;
   }
 );
