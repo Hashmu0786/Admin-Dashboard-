@@ -9,6 +9,7 @@ import Error from "../sharedComponents/Error";
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
+import AddEmployee from "./AddEmployee";
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export default function Table() {
   const [showDelete, setShowDelete] = useState(false);
   const [uniqueId, setUniqueId] = useState(null);
   const [showEditDetails, setShowEditDetails] = useState(false);
+  const [showAddEmployee, setShowAddEmployee] = useState(false);
 
   const handleDeleteId = (id) => {
     setUniqueId(id);
@@ -66,8 +68,8 @@ export default function Table() {
         <h2 className="text-[18px] 2xl:text-3xl 3xl:text-4xl ml-2 mt-2">
           Employee Table
         </h2>
-        <div>
-          <button className="text-xs bg-indigo-500 text-gray-900  p-2 rounded-lg hover:bg-indigo-800 hover:text-white">
+        <div onClick={() => setShowAddEmployee(!showAddEmployee)}>
+          <button className="text-xs bg-indigo-400 text-gray-900  p-2 rounded-lg hover:bg-indigo-800 hover:text-white">
             Add Employee
           </button>
         </div>
@@ -201,6 +203,9 @@ export default function Table() {
           setShowEditDetails={setShowEditDetails}
           editId={uniqueId}
         />
+      ) : null}
+      {showAddEmployee ? (
+        <AddEmployee setShowAddEmployee={setShowAddEmployee} />
       ) : null}
     </div>
   );

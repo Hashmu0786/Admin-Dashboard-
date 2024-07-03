@@ -81,6 +81,7 @@ export const DeltetOneEmployee = createAsyncThunk(
   }
 );
 
+//  fetch the Department list
 export const DepartmentList = createAsyncThunk(
   "employee/departmentlist",
   async () => {

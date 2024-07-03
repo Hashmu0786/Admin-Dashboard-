@@ -56,6 +56,7 @@ import Signin from "./signin/index.jsx";
 import Cookies from "js-cookie";
 import PageNotFound from "./sharedComponents/PageNotFound.jsx";
 import ChangePassword from "./password/ChangePassword.jsx";
+import AddEmployee from "./employee/AddEmployee.jsx";
 
 export default function App() {
   const isAuthenticated = Cookies.get("token");

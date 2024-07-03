@@ -8,5 +8,6 @@ export const store = configureStore({
     login: loginReducer,
     employee: employeeReducer,
     attendance: attendanceReducer,
+    
   },
 });
