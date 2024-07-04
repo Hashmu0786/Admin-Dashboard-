@@ -10,6 +10,7 @@ import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
 import AddEmployee from "./AddEmployee";
+import Successful from "./Successful";
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ export default function Table() {
   const [uniqueId, setUniqueId] = useState(null);
   const [showEditDetails, setShowEditDetails] = useState(false);
   const [showAddEmployee, setShowAddEmployee] = useState(false);
+  const [showSuccModal, setShowSuccModal] = useState(false);
 
   const handleDeleteId = (id) => {
     setUniqueId(id);
@@ -205,7 +207,14 @@ export default function Table() {
         />
       ) : null}
       {showAddEmployee ? (
-        <AddEmployee setShowAddEmployee={setShowAddEmployee} />
+        <AddEmployee
+          setShowAddEmployee={setShowAddEmployee}
+          setShowSuccModal={setShowSuccModal}
+        />
+      ) : null}
+
+      {showSuccModal ? (
+        <Successful setShowSuccModal={setShowSuccModal} />
       ) : null}
     </div>
   );

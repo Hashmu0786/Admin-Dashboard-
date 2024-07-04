@@ -12,9 +12,14 @@ import { MdPersonalInjury } from "react-icons/md";
 import { LuBoxSelect } from "react-icons/lu";
 import { CiBank } from "react-icons/ci";
 import "../App.css";
-import { DepartmentList, newEmployee } from "../reduxToolkit/empSlice";
+import {
+  DepartmentList,
+  fetchDataEmployee,
+  newEmployee,
+} from "../reduxToolkit/empSlice";
+import Successful from "./Successful";
 
-export default function AddEmployee({ setShowAddEmployee }) {
+export default function AddEmployee({ setShowAddEmployee, setShowSuccModal }) {
   const {
     register,
     handleSubmit,
@@ -46,7 +51,13 @@ export default function AddEmployee({ setShowAddEmployee }) {
     console.log("Form Data:", data);
     setShowAddEmployee(false);
     await dispatch(newEmployee(data)).unwrap();
+    await dispatch(fetchDataEmployee());
     console.log("new employee response", newData);
+    if (newData.status == "success") {
+      setShowSuccModal(true);
+    } else {
+      setShowSuccModal(false);
+    }
   };
 
   const handleCancel = () => {
