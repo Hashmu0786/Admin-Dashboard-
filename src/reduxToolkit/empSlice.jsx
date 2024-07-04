@@ -8,6 +8,7 @@ const initialState = {
   data: [],
   onedata: [],
   depList: [],
+  newData: [],
   editdata: [],
   deleteData: [],
   isLoading: false,
@@ -96,6 +97,19 @@ export const DepartmentList = createAsyncThunk(
   }
 );
 
+// add the new employee
+
+export const newEmployee = createAsyncThunk("employee/newAdd", async (data) => {
+  const token = Cookies.get("token");
+  const response = await api.post(`employees/`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log("new Employee added", response.data);
+  return response?.data;
+});
+
 const employeeSlice = createSlice({
   name: "employee",
   initialState,
@@ -170,6 +184,17 @@ const employeeSlice = createSlice({
       .addCase(DepartmentList.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+
+      // add the new Employee
+      .addCase(newEmployee.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(newEmployee.fulfilled, (state, action) => {
+        (state.isLoading = false), (state.newData = action.payload);
+      })
+      .addCase(newEmployee.rejected, (state, action) => {
+        (state.isLoading = false), (state.error = action.payload);
       });
   },
 });

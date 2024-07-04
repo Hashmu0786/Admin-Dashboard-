@@ -69,8 +69,8 @@ export default function App() {
           path="/"
           element={!isAuthenticated ? <Navigate to="/signin" /> : <Layout />}
         >
+          {/* <Route path="/" element={<Layout />}> */}
           <Route index element={<Dashboard />} />
-
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="employee" element={<Employee />} />

@@ -69,7 +69,7 @@ export default function Table() {
           Employee Table
         </h2>
         <div onClick={() => setShowAddEmployee(!showAddEmployee)}>
-          <button className="text-xs bg-indigo-400 text-gray-900  p-2 rounded-lg hover:bg-indigo-800 hover:text-white">
+          <button className="text-xs bg-blue-500 text-gray-200  p-2 rounded-lg hover:bg-indigo-800 hover:text-white">
             Add Employee
           </button>
         </div>
