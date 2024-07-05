@@ -12,10 +12,13 @@ const initialState = {
 
 export const AttendanceTodayData = createAsyncThunk(
   "attendance/todaydata",
-  async (date) => {
+  async (filterQuery) => {
+    let query = "";
+    Object.entries(filterQuery).map(([key, value]) => {
+      query += `${key}=${value}&`;
+    });
     const token = Cookies.get("token");
-    const response = await api.get(`attendance/daily/all?date=${date}`, {
-      // const response = await api.get(`attendance/daily/all?date=2024-07-05`, {
+    const response = await api.get(`attendance/daily/all?${query}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -26,7 +29,6 @@ export const AttendanceTodayData = createAsyncThunk(
 );
 
 //edit the Attendance status and approve status for the single employee
-
 export const EditStatus = createAsyncThunk(
   "attendace/editstatus",
   async ({ id, data }) => {
@@ -44,27 +46,26 @@ export const EditStatus = createAsyncThunk(
   }
 );
 
-// export const EditStatus = createAsyncThunk(
-//   "attendance/editstatus",
-//   async ({ id, data }, { rejectWithValue }) => {
-//     try {
-//       console.log("attendance Slice data", data);
-//       console.log("attendance Slice id", id);
+// update the multile status at once
 
-//       const token = Cookies.get("token");
-//       const response = await api.patch(`attendance/${id}/status`, data, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-//       console.log("status change ", response.data);
-//       return response.data;
-//     } catch (error) {
-//       console.error("Error changing status: ", error);
-//       return rejectWithValue(error.response?.data || error.message);
-//     }
-//   }
-// );
+export const MultiEditStatus = createAsyncThunk(
+  "attendance/multiedit",
+  async ({ data }, thunkAPI) => {
+    try {
+      const token = Cookies.get("token");
+      const response = await api.patch(`attendance/status`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Multi edit data:", data);
+      console.log("Response from API:", response.data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // Get the work Timing
 
@@ -115,6 +116,17 @@ const attendanceSlice = createSlice({
         state.error = action.payload;
       })
 
+      // update the multile status at once
+
+      .addCase(MultiEditStatus.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(MultiEditStatus.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(MultiEditStatus.rejected, (state, action) => {
+        state.error = action.payload;
+      })
       //Work timing
       .addCase(WorkTiming.pending, (state) => {
         state.isLoading = true;
