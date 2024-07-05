@@ -3,7 +3,13 @@ import { IoFilterSharp } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
 import DatePicker from "react-datepicker";
 import { FaCalendarAlt } from "react-icons/fa";
+import dateFormat from "dateformat";
 import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch } from "react-redux";
+import {
+  AttendanceTodayData,
+  clearAttendaceData,
+} from "../reduxToolkit/attendanceSlice";
 
 export default function Searchbar() {
   const [selectedDepartment, setSelectedDepartment] = useState("All");
@@ -11,9 +17,22 @@ export default function Searchbar() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const datePickerRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleIconClick = () => {
     datePickerRef.current.setFocus();
+  };
+
+  const handledate = async (event) => {
+    console.log("my date", event.target.value);
+    // await dispatch(clearAttendaceData());
+    await dispatch(AttendanceTodayData(event.target.value)).unwrap();
+
+    // const dateStr = dateFormat(date, "dd/mm/yyyy");
+    // const [day, month, year] = dateStr.split("/");
+    // const formattedDate = `${year}-${month}-${day}`;
+    // setSelectedDate(formattedDate);
+    // console.log("formate date", formattedDate);
   };
 
   return (
@@ -35,14 +54,20 @@ export default function Searchbar() {
               <span onClick={handleIconClick} className="cursor-pointer">
                 <FaCalendarAlt size={15} className="ml-0 2xl:h-8 2xl:w-8" />
               </span>
-              <DatePicker
+              {/* <DatePicker
                 ref={datePickerRef}
                 selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
+                onChange={(date) => handledate(date)}
                 className="text-gray-800 text-xs 2xl:text-[22px] 3xl:text-2xl outline-none 2xl:h-8"
                 placeholderText="Select date"
                 dateFormat="dd/MM/yyyy"
                 popperPlacement="bottom-end"
+              /> */}
+              <input
+                type="date"
+                onChange={handledate}
+                placeholder="dd/mm/yy"
+                className="text-gray-800 text-xs 2xl:text-[22px] 3xl:text-2xl outline-none 2xl:h-8"
               />
             </div>
           </div>

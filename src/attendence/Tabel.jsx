@@ -3,15 +3,22 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { AttendanceTodayData } from "../reduxToolkit/attendanceSlice";
+import {
+  AttendanceTodayData,
+  EditStatus,
+} from "../reduxToolkit/attendanceSlice";
 import Loading from "../sharedComponents/Loading";
 import Error from "../sharedComponents/Error";
+import dateFormat from "dateformat";
 
 export default function Tabel() {
   const [editingRowId, setEditingRowId] = useState(null);
   const statusOptions = ["present", "absent", "holiday", "Leave", "Weekend"];
-  const approveOptions = ["approve", "pending", "Reject"];
+  const approveOptions = ["approved", "pending", "Reject"];
   const dispatch = useDispatch();
+
+  const now = new Date();
+
   const {
     Todaydata: Todaydata,
     isLoading,
@@ -20,34 +27,19 @@ export default function Tabel() {
 
   console.log("my today data", Todaydata);
 
-  const getDateForApi = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
-
   useEffect(() => {
-    // dispatch(AttendanceTodayData(getDateForApi()));
-    dispatch(AttendanceTodayData());
-  }, [dispatch, getDateForApi()]);
+    console.log("again Calling or not");
 
-  function getFormattedDate() {
-    const today = new Date();
-    const day = today.getDate();
-    const month = today.toLocaleString("default", { month: "short" });
-    const year = today.getFullYear();
+    dispatch(AttendanceTodayData(dateFormat(now, "yyyy-mm-dd")));
+    // dispatch(AttendanceTodayData(formattedDate));
 
-    return `${day} ${month} ${year}`;
-  }
+    console.log("again Calling");
+  }, [dispatch]);
 
   const [formData, setFormData] = useState({
     approvalStatus: "",
     attendanceStatus: "",
   });
-  // Handle select change for attendance status
 
   const handleAttendanceChange = (e) => {
     const { value } = e.target;
@@ -56,7 +48,6 @@ export default function Tabel() {
       attendanceStatus: value,
     });
   };
-  // Handle select change for approval status
 
   const handleApprovalChange = (e) => {
     const { value } = e.target;
@@ -65,50 +56,28 @@ export default function Tabel() {
       approvalStatus: value,
     });
   };
+
   const handleEditClick = (empID) => {
     setEditingRowId(empID);
+    const rowData = Todaydata.attendanceRecords.find(
+      (row) => row._id === empID
+    );
+    setFormData({
+      approvalStatus: rowData?.approvalStatus || "",
+      attendanceStatus: rowData?.attendanceStatus || "",
+    });
   };
 
   const handleCancelClick = () => {
     setEditingRowId(null);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async (id) => {
     setEditingRowId(null);
     console.log("edit data of approve ", formData);
+    await dispatch(EditStatus({ id, data: formData }));
+    await dispatch(AttendanceTodayData(dateFormat(now, "yyyy-mm-dd")));
   };
-
-  function formatTimeforpunchin(dateString) {
-    const date = new Date(dateString);
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-
-    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-    const timeString = `${hours}:${formattedMinutes} ${ampm}`;
-
-    return timeString;
-  }
-
-  function formatTimeforpunchout(dateString) {
-    const date = new Date(dateString);
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-
-    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-    const timeString = `${hours}:${formattedMinutes} ${ampm}`;
-
-    return timeString;
-  }
 
   return (
     <div className="w-[450px] mt-0 w-full">
@@ -117,7 +86,7 @@ export default function Tabel() {
           Attendance Table
         </h2>
         <h2 className="text-[18px] 2xl:text-3xl 3xl:text-4xl ml-2 mt-2">
-          {getFormattedDate()}
+          {dateFormat(now, " mmmm dS, yyyy")}
         </h2>
       </div>
       <hr />
@@ -190,11 +159,14 @@ export default function Tabel() {
                     {row.Department}
                   </td>
                   <td className="px-2 py-3 xl:px-4 2xl:py-5 2xl:px-6">
-                    {/* {row.PunchIn} */}
-                    {formatTimeforpunchin(row.punchInTime)}
+                    {row.PunchIn
+                      ? dateFormat(row.PunchIn, "UTC:h:MM TT")
+                      : "--"}
                   </td>
                   <td className="px-2 py-3 xl:px-4 2xl:py-5 2xl:px-6">
-                    {formatTimeforpunchout(row.punchOutTime)}
+                    {row.punchOutTime
+                      ? dateFormat(row.punchOutTime, "UTC:h:MM TT")
+                      : "--"}
                   </td>
                   <td className="px-2 py-3  xl:px-4 2xl:py-5 2xl:px-6">
                     {row?.duration ? row.duration : "--"}
@@ -204,118 +176,117 @@ export default function Tabel() {
                     {editingRowId === row._id ? (
                       <select
                         name="attendanceStatus"
-                        value={row.status}
+                        value={formData.attendanceStatus}
                         onChange={handleAttendanceChange}
                         className={
-                          row.attendanceStatus === "present"
+                          formData.attendanceStatus === "present"
                             ? "bg-green-200 shadow text-green-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 xl:py-1 xl:px-1 2xl:py-2 2xl:px-4 rounded-lg"
-                            : row.attendanceStatus === "Leave"
-                            ? "bg-amber-200 shadow text-amber-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:px-4 rounded-lg"
-                            : row.attendanceStatus === "absent"
-                            ? "bg-red-200 text-red-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:px-4 rounded-lg"
-                            : row.attendanceStatus === "halfday"
-                            ? "bg-blue-200 text-blue-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-4 rounded-lg"
-                            : row.attendanceStatus === "Holiday"
-                            ? "bg-teal-200 text-teal-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-5 3xl:px-4 rounded-lg"
+                            : formData.attendanceStatus === "Leave"
+                            ? "bg-amber-200 shadow text-amber-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
+                            : formData.attendanceStatus === "Weekend"
+                            ? "bg-blue-200 shadow text-blue-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
+                            : formData.attendanceStatus === "absent"
+                            ? "bg-red-200 shadow text-red-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
+                            : formData.attendanceStatus === "holiday"
+                            ? "bg-cyan-200 shadow text-cyan-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
                             : ""
                         }
                       >
                         {statusOptions.map((status) => (
-                          <option
-                            key={status}
-                            value={status}
-                            className="text-xs"
-                          >
+                          <option key={status} value={status}>
                             {status}
                           </option>
                         ))}
                       </select>
                     ) : (
-                      <span
-                        className={
-                          row.attendanceStatus === "present"
-                            ? "bg-green-200 shadow text-green-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-2 text-center xl:py-1 xl:px-3 2xl:py-2 2xl:px-4 rounded-lg"
-                            : row.attendanceStatus === "Leave"
-                            ? "bg-amber-200 shadow text-amber-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1  px-3 text-center xl:py-1 xl:px-5 2xl:py-2 2xl:px-6 rounded-lg"
-                            : row.attendanceStatus === "absent"
-                            ? "bg-red-200 text-red-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1  px-2 text-center xl:py-1 xl:px-3 2xl:py-2 2xl:px-4 rounded-lg"
-                            : row.attendanceStatus === "halfday"
-                            ? "bg-blue-200 text-blue-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-2 2xl:py-2 2xl:px-2 rounded-lg"
-                            : row.attendanceStatus === "Holiday"
-                            ? "bg-teal-200 text-teal-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1  px-2 text-center xl:py-1 xl:px-3 2xl:py-2 2xl:px-4 rounded-lg"
-                            : ""
-                        }
-                      >
-                        {row.attendanceStatus}
-                        {console.log(
-                          "My attendace status",
-                          row.attendanceStatus
-                        )}
-                      </span>
+                      <>
+                        {row.attendanceStatus === "present" ? (
+                          <p className="bg-green-200 shadow text-green-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 xl:py-1 xl:px-1 2xl:py-2 2xl:px-4 rounded-lg">
+                            {row.attendanceStatus}
+                          </p>
+                        ) : row.attendanceStatus === "Leave" ? (
+                          <p className="bg-amber-200 shadow text-amber-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.attendanceStatus}
+                          </p>
+                        ) : row.attendanceStatus === "Weekend" ? (
+                          <p className="bg-blue-200 shadow text-blue-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.attendanceStatus}
+                          </p>
+                        ) : row.attendanceStatus === "absent" ? (
+                          <p className="bg-red-200 shadow text-red-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.attendanceStatus}
+                          </p>
+                        ) : row.attendanceStatus === "holiday" ? (
+                          <p className="bg-cyan-200 shadow text-cyan-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.attendanceStatus}
+                          </p>
+                        ) : null}
+                      </>
                     )}
                   </td>
-                  <td className="py-1 px-6 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6">
+                  <td className="px-2 py-0 xl:px-4 2xl:py-5 2xl:px-6 text-center">
                     {editingRowId === row._id ? (
                       <select
                         name="approvalStatus"
-                        value={row.approve}
+                        value={formData.approvalStatus}
                         onChange={handleApprovalChange}
                         className={
-                          row.approvalStatus === "approved"
-                            ? "bg-cyan-200 shadow text-cyan-800  text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 rounded-lg"
-                            : row.approvalStatus === "pending"
-                            ? "bg-slate-200 shadow text-slate-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 rounded-lg"
-                            : row.approvalStatus === "Reject"
-                            ? "bg-fuchsia-200 text-fuchsia-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 rounded-lg"
+                          formData.approvalStatus === "approved"
+                            ? "bg-green-200 shadow text-green-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
+                            : formData.approvalStatus === "Reject"
+                            ? "bg-red-200 shadow text-red-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
+                            : formData.approvalStatus === "pending"
+                            ? "bg-gray-200 shadow text-gray-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg"
                             : ""
                         }
                       >
-                        {approveOptions.map((approve) => (
-                          <option
-                            key={approve}
-                            value={approve}
-                            className="text-xs"
-                          >
-                            {approve}
+                        {approveOptions.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
                           </option>
                         ))}
                       </select>
                     ) : (
-                      <span
-                        className={
-                          row.approvalStatus === "approved"
-                            ? "bg-cyan-200 shadow text-cyan-800  text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1  px-2 text-center xl:py-1 xl:px-3 2xl:py-2 2xl:px-4 rounded-lg"
-                            : row.approvalStatus === "pending"
-                            ? "bg-slate-200 shadow text-slate-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1  px-2 text-center xl:py-1 xl:px-3 2xl:py-2 2xl:px-5 rounded-lg"
-                            : row.approvalStatus === "Reject"
-                            ? "bg-fuchsia-200 text-fuchsia-800 shadow text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-3 xl:py-1 xl:px-4 2xl:py-2 2xl:px-6 rounded-lg"
-                            : ""
-                        }
-                      >
-                        {row.approvalStatus}
-                      </span>
+                      <>
+                        {row.approvalStatus === "approved" ? (
+                          <p className="bg-green-200 shadow text-green-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.approvalStatus}
+                          </p>
+                        ) : row.approvalStatus === "Reject" ? (
+                          <p className="bg-red-200 shadow text-red-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.approvalStatus}
+                          </p>
+                        ) : row.approvalStatus === "pending" ? (
+                          <p className="bg-gray-200 shadow text-gray-800 text-[10px] 2xl:text-[16px] 3xl:text-[18px] py-1 px-1 text-center xl:py-1 xl:px-1 2xl:py-2 2xl:px-6 3xl:py-3 rounded-lg">
+                            {row.approvalStatus}
+                          </p>
+                        ) : null}
+                      </>
                     )}
                   </td>
-                  <td className="py-1 px-0 xl:py-3 xl:px-4 2xl:py-5 2xl:px-6">
+                  <td className="py-3 px-4 xl:px-4 2xl:py-4 2xl:px-6">
                     {editingRowId === row._id ? (
-                      <div className="flex gap-4">
-                        <IoMdCheckmarkCircle
-                          size={20}
-                          className="text-green-500 2xl:h-8 2xl:w-8 3xl:w-10 3xl:h-10"
-                          onClick={handleSaveClick}
-                        />
-                        <MdCancel
-                          size={20}
-                          className="text-red-400 2xl:h-8 2xl:w-8 3xl:w-10 3xl:h-10"
+                      <div className="flex space-x-4">
+                        <button className="text-green-500 text-lg">
+                          <IoMdCheckmarkCircle
+                            className="h-6 w-6 2xl:h-8 2xl:w-8"
+                            onClick={() => handleSaveClick(row._id)}
+                          />
+                        </button>
+                        <button
                           onClick={handleCancelClick}
-                        />
+                          className="text-red-500 text-lg"
+                        >
+                          <MdCancel className="h-6 w-6 2xl:h-8 2xl:w-8" />
+                        </button>
                       </div>
                     ) : (
-                      <FaRegEdit
-                        size={20}
-                        className="text-[#121843] 2xl:h-8 2xl:w-8"
+                      <button
                         onClick={() => handleEditClick(row._id)}
-                      />
+                        className="text-blue-500 text-lg"
+                      >
+                        <FaRegEdit className="h-6 w-6 2xl:h-8 2xl:w-8" />
+                      </button>
                     )}
                   </td>
                 </tr>
