@@ -30,7 +30,9 @@ export default function Navbar() {
       className="fixed top-[-5px] left-[155px] xl:left-[220px] z-20  flex items-center w-full justify-between h-[50px] p-6 px-12 2xl:h-[80px] 3xl:h-[5  0px] border-b border-gray-300"
       style={{ backgroundImage: `url(${bgimage})` }}
     >
-      <p className="text-lg font-medium text-[roboto]">Welcome Qurilo</p>
+      <p className="text-lg font-medium text-[roboto] text-white">
+        Welcome Qurilo
+      </p>
       <div className="flex gap-6 3xl:gap-10 items-center mr-48 2xl:mr-64 xl:mr-56 3xl:mr-96 relative">
         <div className="relative">
           <IoIosNotifications

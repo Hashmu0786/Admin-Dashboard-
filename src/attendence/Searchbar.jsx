@@ -11,7 +11,8 @@ import {
   clearAttendaceData,
 } from "../reduxToolkit/attendanceSlice";
 
-export default function Searchbar() {
+export default function Searchbar({ setSendDate }) {
+  const inputRef = useRef(null);
   const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [showFilter, setShowFilter] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -19,20 +20,15 @@ export default function Searchbar() {
   const datePickerRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleIconClick = () => {
-    datePickerRef.current.setFocus();
-  };
-
   const handledate = async (event) => {
     console.log("my date", event.target.value);
-    // await dispatch(clearAttendaceData());
+    setSendDate(event.target.value);
     await dispatch(AttendanceTodayData(event.target.value)).unwrap();
+  };
 
-    // const dateStr = dateFormat(date, "dd/mm/yyyy");
-    // const [day, month, year] = dateStr.split("/");
-    // const formattedDate = `${year}-${month}-${day}`;
-    // setSelectedDate(formattedDate);
-    // console.log("formate date", formattedDate);
+  const handleSearch = async (event) => {
+    console.log("search value", event.target.value);
+    await dispatch(AttendanceTodayData(event.target.value)).unwrap();
   };
 
   return (
@@ -46,26 +42,19 @@ export default function Searchbar() {
             <input
               type="text"
               placeholder="Search"
+              onChange={handleSearch}
               className="bg-transparent text-sm 2xl:text-base 3xl:text-xl text-gray-500 px-2 py-1 flex-grow outline-none focus:border-black 2xl:px-4 2xl:py-2"
             />
           </div>
           <div>
-            <div className="flex items-center gap-2 2xl:gap-4 border-[1px] border-gray-500 rounded-lg px-1 py-[2px] 3xl:px-5 3xl:py-3 2xl:px-4 2xl:py-2">
-              <span onClick={handleIconClick} className="cursor-pointer">
-                <FaCalendarAlt size={15} className="ml-0 2xl:h-8 2xl:w-8" />
-              </span>
-              {/* <DatePicker
-                ref={datePickerRef}
-                selected={selectedDate}
-                onChange={(date) => handledate(date)}
-                className="text-gray-800 text-xs 2xl:text-[22px] 3xl:text-2xl outline-none 2xl:h-8"
-                placeholderText="Select date"
-                dateFormat="dd/MM/yyyy"
-                popperPlacement="bottom-end"
-              /> */}
+            <div
+              onClick={() => inputRef.current?.showPicker()}
+              className="flex items-center gap-2 2xl:gap-4 border-[1px] border-gray-500 rounded-lg px-1 py-[2px] 3xl:px-5 3xl:py-3 2xl:px-4 2xl:py-2"
+            >
               <input
                 type="date"
                 onChange={handledate}
+                ref={inputRef}
                 placeholder="dd/mm/yy"
                 className="text-gray-800 text-xs 2xl:text-[22px] 3xl:text-2xl outline-none 2xl:h-8"
               />
