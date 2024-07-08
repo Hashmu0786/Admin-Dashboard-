@@ -16,6 +16,7 @@ export default function Tabel({ date }) {
   const [editingRowId, setEditingRowId] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
   const [showStatus, setShowStatus] = useState(false);
+  // console.log(showStatus)
   const statusOptions = ["present", "absent", "holiday", "Leave", "Weekend"];
   const approveOptions = ["approved", "pending", "Reject"];
   const dispatch = useDispatch();
@@ -32,10 +33,6 @@ export default function Tabel({ date }) {
     approvalStatus: "",
     attendanceStatus: "",
   });
-  //  const [editstatus, setFormData] = useState({
-  //    approvalStatus: "",
-  //    attendanceStatus: "",
-  //  });
 
   const handleAttendanceChange = (e) => {
     const { value } = e.target;
@@ -68,6 +65,7 @@ export default function Tabel({ date }) {
     setEditingRowId(null);
   };
 
+  //Edit single attendance
   const handleSaveClick = async (id) => {
     setEditingRowId(null);
     console.log("edit data of approve ", formData);
@@ -87,9 +85,15 @@ export default function Tabel({ date }) {
     }
   };
 
-  const handlePrintSelected = () => {
-    console.log("Selected Row IDs: ", selectedRows);
-  };
+  // const handlerowids = async () => {
+  //   console.log("Selected Row IDs: ", selectedRows);
+  //   await setEditStatus((prevStatus) => ({
+  //     ...prevStatus,
+  //     ids: [...selectedRows],
+  //   }));
+
+  //   console.log(editstatus);
+  // };
 
   return (
     <div className="w-[450px] mt-0 w-full">
@@ -101,19 +105,14 @@ export default function Tabel({ date }) {
           {dateFormat(date, " mmmm dS, yyyy")}
         </h2>
         <div className="flex ml-[500px] mt-2">
-          <button
-            onClick={() => setShowStatus(true)}
-            className="ml-4 bg-transparent text-xs hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-1 px-2 border border-indigo-800 hover:border-transparent rounded-lg"
-          >
-            Select Status
-          </button>
-
-          <button
-            onClick={handlePrintSelected}
-            className="ml-4 bg-transparent text-xs hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-1 px-2 border border-indigo-800 hover:border-transparent rounded-lg"
-          >
-            Update All
-          </button>
+          {selectedRows.length > 0 && (
+            <button
+              onClick={() => setShowStatus(true)}
+              className="ml-4 bg-transparent text-xs hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-1 px-2 border border-indigo-800 hover:border-transparent rounded-lg"
+            >
+              Edit Attendance
+            </button>
+          )}
         </div>
       </div>
       <hr />
@@ -351,7 +350,14 @@ export default function Tabel({ date }) {
           </table>
         )}
       </div>
-      {showStatus ? <SelectStatus setShowStatus={setShowStatus} /> : null}
+      {showStatus ? (
+        <SelectStatus
+          setShowStatus={setShowStatus}
+          status={showStatus}
+          date={date}
+          selectedRows={selectedRows}
+        />
+      ) : null}
     </div>
   );
 }

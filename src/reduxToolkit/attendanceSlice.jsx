@@ -50,7 +50,7 @@ export const EditStatus = createAsyncThunk(
 
 export const MultiEditStatus = createAsyncThunk(
   "attendance/multiedit",
-  async ({ data }, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
       const token = Cookies.get("token");
       const response = await api.patch(`attendance/status`, data, {

@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 export default function Attendance() {
   const [date, setDate] = useState(new Date());
   const [search, setSearch] = useState("");
+ 
   const dispatch = useDispatch();
 
   useEffect(() => {
